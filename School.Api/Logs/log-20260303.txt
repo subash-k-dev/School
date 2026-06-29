@@ -1,0 +1,13 @@
+2026-03-03 14:51:51.364 +05:30 [INF] Starting School API
+2026-03-03 15:07:57.758 +05:30 [INF] Starting School API
+2026-03-03 15:21:28.614 +05:30 [INF] Starting School API
+2026-03-03 15:24:57.339 +05:30 [INF] Starting School API
+2026-03-03 15:27:30.877 +05:30 [INF] HTTP POST /api/Auth/login responded 200 in 2240.9606 ms
+2026-03-03 15:32:37.779 +05:30 [INF] HTTP POST /api/Auth/login responded 401 in 303.7438 ms
+2026-03-03 15:33:09.819 +05:30 [INF] HTTP POST /api/Auth/login responded 200 in 100.3938 ms
+2026-03-03 15:45:24.833 +05:30 [INF] Starting School API
+2026-03-03 15:47:08.822 +05:30 [INF] HTTP POST /api/Auth/login responded 200 in 377.8204 ms
+2026-03-03 17:14:53.377 +05:30 [INF] Starting School API
+2026-03-03 17:43:26.791 +05:30 [INF] Starting School API
+2026-03-03 18:09:46.740 +05:30 [INF] Starting School API
+2026-03-03 18:10:02.666 +05:30 [INF] HTTP POST /api/auth/login responded 200 in 392.5465 ms

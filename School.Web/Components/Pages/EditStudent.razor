@@ -1,0 +1,171 @@
+﻿@page "/students/edit/{Id:guid}"
+@using School.Application.DTOs.Students
+@using School.Web.Services
+@inject AuthService Auth
+@inject NavigationManager Nav
+@inject ToastService Toast
+
+<PageTitle>Edit Student</PageTitle>
+
+<h3>Edit Student</h3>
+
+@if (!Auth.IsLoggedIn)
+{
+    <p>Redirecting to login...</p>
+}
+else if (!Auth.IsAdmin)
+{
+    <div class="alert alert-warning">
+        You do not have permission to edit students. Only <b>Admin</b> can access this page.
+    </div>
+
+    <button class="btn btn-secondary" @onclick="Cancel">Back</button>
+}
+else if (_loading)
+{
+    <p>Loading...</p>
+}
+else if (!string.IsNullOrEmpty(_error))
+{
+    <div class="alert alert-danger">@_error</div>
+}
+else
+{
+    <div class="card p-4">
+
+        <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input class="form-control" @bind="_form.Name" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Age</label>
+            <input type="number" class="form-control" @bind="_form.Age" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Class</label>
+            <input class="form-control" @bind="_form.Class" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Total Fee</label>
+            <input type="number" class="form-control" @bind="_form.TotalFee" />
+        </div>
+
+        <button class="btn btn-success me-2" @onclick="Save">Update</button>
+        <button class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public Guid Id { get; set; }
+
+    private bool _loading = true;
+    private string? _error;
+
+    private StudentEditForm _form = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        if (!Auth.IsLoggedIn)
+        {
+            Nav.NavigateTo("/login");
+            return;
+        }
+
+        if (!Auth.IsAdmin)
+        {
+            _loading = false;
+            StateHasChanged();
+            return;
+        }
+
+        await LoadStudent();
+        StateHasChanged();
+    }
+
+    private async Task LoadStudent()
+    {
+        try
+        {
+            var client = Auth.GetAuthorizedClient();
+
+            var student = await client.GetFromJsonAsync<StudentResponse>($"api/students/{Id}");
+
+            if (student == null)
+            {
+                _error = "Student not found";
+                return;
+            }
+
+            _form.RollNumber = student.Rollnumber;
+            _form.Name = student.Name;
+            _form.Age = student.Age;
+            _form.Class = student.Class;
+            _form.TotalFee = student.TotalFee;
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private async Task Save()
+    {
+        if (!Auth.IsAdmin)
+        {
+            _error = "Access denied.";
+            return;
+        }
+
+        try
+        {
+            var req = new UpdateStudentRequest(
+                _form.RollNumber,
+                _form.Name,
+                _form.Age,
+                _form.Class,
+                _form.TotalFee
+            );
+
+            var client = Auth.GetAuthorizedClient();
+
+            var res = await client.PutAsJsonAsync($"api/students/{Id}", req);
+
+            if (!res.IsSuccessStatusCode)
+            {
+                _error = $"Update failed: {res.StatusCode}";
+                Toast.ShowError("Failed to update student.");
+                return;
+            }
+
+            Toast.ShowSuccess("Student updated successfully.");
+            Nav.NavigateTo("/students");
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+    }
+
+    private void Cancel() => Nav.NavigateTo("/students");
+
+    private class StudentEditForm
+    {
+        public string RollNumber { get; set; } = string.Empty;
+        public string Name { get; set; } = "";
+        public int Age { get; set; }
+        public string Class { get; set; } = "";
+        public decimal TotalFee { get; set; }
+    }
+}

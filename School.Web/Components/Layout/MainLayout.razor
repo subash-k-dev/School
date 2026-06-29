@@ -1,0 +1,96 @@
+﻿@inherits LayoutComponentBase
+@inject School.Web.Services.AuthService Auth
+@inject School.Web.Services.ToastService Toast
+@implements IDisposable
+
+@if (_showToast)
+{
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 2000;">
+        <div class="toast show align-items-center text-bg-@_toastType border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body">
+                    @_toastMessage
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" @onclick="HideToast"></button>
+            </div>
+        </div>
+    </div>
+}
+
+@if (!Auth.IsLoggedIn)
+{
+    <!-- ✅ No sidebar layout (full screen content) -->
+    <main class="w-100">
+        @Body
+    </main>
+}
+else
+{
+    <!-- ✅ Normal layout with sidebar -->
+    <div class="page">
+        <div class="sidebar">
+            <NavMenu />
+        </div>
+
+        <main>
+            <article class="content px-4">
+                @Body
+            </article>
+        </main>
+    </div>
+}
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+
+@code {
+    private bool _showToast;
+    private string _toastMessage = string.Empty;
+    private string _toastType = "info";
+
+    protected override void OnInitialized()
+    {
+        Toast.OnShow += ShowToast;
+        Toast.OnHide += HideToast;
+    }
+
+    private void ShowToast(string message, string type)
+    {
+        _ = ShowToastAsync(message, type);
+    }
+
+    private async Task ShowToastAsync(string message, string type)
+    {
+        try
+        {
+            _toastMessage = message;
+            _toastType = type;
+            _showToast = true;
+            await InvokeAsync(StateHasChanged);
+
+            await Task.Delay(3000);
+
+            _showToast = false;
+            await InvokeAsync(StateHasChanged);
+        }
+        catch
+        {
+            // ignore UI disposal timing issues
+        }
+    }
+
+    private void HideToast()
+    {
+        _showToast = false;
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Toast.OnShow -= ShowToast;
+        Toast.OnHide -= HideToast;
+    }
+}

@@ -1,0 +1,384 @@
+﻿@page "/fees/pay"
+@page "/fees/pay/{StudentId:guid}"
+@using System.Text.Json
+@using School.Application.DTOs.Students
+@using School.Web.Services
+@inject School.Web.Services.AuthService Auth
+@inject NavigationManager Nav
+@inject ToastService Toast
+
+<PageTitle>Pay Fee</PageTitle>
+
+<h3>Pay Fee</h3>
+
+@if (!Auth.IsLoggedIn)
+{
+    <p>Redirecting to login...</p>
+}
+else if (!Auth.IsAdmin)
+{
+    <div class="alert alert-warning">
+        You do not have permission to pay fees. Only <b>Admin</b> can access this page.
+    </div>
+
+    <button class="btn btn-secondary" @onclick="Back">Back</button>
+}
+else
+{
+    @if (!string.IsNullOrWhiteSpace(_error))
+    {
+        <div class="alert alert-danger">@_error</div>
+    }
+    @if (!string.IsNullOrWhiteSpace(_success))
+    {
+        <div class="alert alert-success">@_success</div>
+    }
+
+    @if (_loadingStudents)
+    {
+        <p>Loading students list...</p>
+    }
+
+    <div class="card p-4 mb-3">
+        <div class="mb-3">
+            <label class="form-label">Select Student</label>
+
+            <div class="mb-2">
+                <input class="form-control" placeholder="Search student (name / class)..."
+                       @bind="_search" />
+            </div>
+
+            <select class="form-select" @onchange="OnStudentChanged">
+                <option value="">-- Select student --</option>
+                @foreach (var s in FilteredStudents)
+                {
+                    <option value="@s.Id">@($"{s.Rollnumber} - {s.Name} ({s.Class})")</option>
+                }
+            </select>
+
+            <div class="text-muted small mt-1">
+                Tip: You can also open this page from <b>Students → Pay Fee</b> button.
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Student Id</label>
+            <input class="form-control" @bind="_formStudentId" readonly />
+        </div>
+
+        @if (_loadingStudent)
+        {
+            <p>Loading student details...</p>
+        }
+        else if (_student != null)
+        {
+            <div class="card p-3 mt-2">
+                <div class="fw-bold">Student Details</div>
+                <div class="text-muted small">Confirm before paying</div>
+
+                <div class="mt-2">
+                    <div><span class="fw-semibold">Roll Number:</span> @_student.Rollnumber</div>
+                    <div><span class="fw-semibold">Name:</span> @_student.Name</div>
+                    <div><span class="fw-semibold">Class:</span> @_student.Class</div>
+                    <div><span class="fw-semibold">Age:</span> @_student.Age</div>
+                    <div><span class="fw-semibold">Total Fee:</span> @_student.TotalFee</div>
+
+                    @if (_loadingSummary)
+                    {
+                        <div class="text-muted small mt-2">Loading fee summary...</div>
+                    }
+                    else
+                    {
+                        <div><span class="fw-semibold">Paid:</span> @_paid</div>
+                        <div><span class="fw-semibold">Due:</span> @_due</div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="card p-4">
+        <div class="mb-3">
+            <label class="form-label">Amount</label>
+            <input type="number" class="form-control" @bind="_amount" />
+        </div>
+
+        @if (_amountTooHigh)
+        {
+            <div class="text-danger small mt-1">
+                Amount cannot be greater than Due (@_dueValue).
+            </div>
+        }
+
+        <div class="d-flex gap-2">
+            <button class="btn btn-success"
+                    @onclick="Pay"
+                    disabled="@(!_canPay || _amountTooHigh)">
+                Pay
+            </button>
+
+            <button class="btn btn-secondary" @onclick="Back">Back</button>
+        </div>
+
+        @if (!_canPay)
+        {
+            <div class="text-muted small mt-2">Select a student to enable payment.</div>
+        }
+    </div>
+}
+
+@code {
+    [Parameter] public Guid StudentId { get; set; }
+
+    private string? _error;
+    private string? _success;
+
+    private bool _loadingStudents;
+    private List<StudentResponse> _students = new();
+
+    private bool _loadingStudent;
+    private StudentResponse? _student;
+
+    private string _formStudentId = "";
+    private decimal _amount;
+
+    private string _paid = "0";
+    private string _due = "0";
+    private bool _loadingSummary;
+
+    private bool _canPay => _student != null;
+
+    private string _search = "";
+
+    private IEnumerable<StudentResponse> FilteredStudents =>
+        string.IsNullOrWhiteSpace(_search)
+            ? _students
+            : _students.Where(s =>
+                (s.Name?.Contains(_search, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (s.Class?.Contains(_search, StringComparison.OrdinalIgnoreCase) ?? false));
+
+    private decimal _dueValue;
+    private bool _amountTooHigh => _dueValue > 0 && _amount > _dueValue;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        if (!Auth.IsLoggedIn)
+        {
+            Nav.NavigateTo("/login");
+            return;
+        }
+
+        if (!Auth.IsAdmin)
+        {
+            StateHasChanged();
+            return;
+        }
+
+        await LoadStudentsListAsync();
+
+        if (StudentId != Guid.Empty)
+        {
+            await SelectStudentAsync(StudentId);
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task LoadStudentsListAsync()
+    {
+        try
+        {
+            _loadingStudents = true;
+
+            var client = Auth.GetAuthorizedClient();
+            var list = await client.GetFromJsonAsync<List<StudentResponse>>("api/students");
+
+            _students = list ?? new List<StudentResponse>();
+        }
+        catch (Exception ex)
+        {
+            _error = "Failed to load students: " + ex.Message;
+            Toast.ShowError("Failed to load students.");
+        }
+        finally
+        {
+            _loadingStudents = false;
+        }
+    }
+
+    private async Task OnStudentChanged(ChangeEventArgs e)
+    {
+        _error = null;
+        _success = null;
+
+        var value = e.Value?.ToString();
+
+        if (string.IsNullOrWhiteSpace(value) || !Guid.TryParse(value, out var id))
+        {
+            _student = null;
+            _formStudentId = "";
+            _paid = "0";
+            _due = "0";
+            _dueValue = 0;
+            _amount = 0;
+            return;
+        }
+
+        await SelectStudentAsync(id);
+    }
+
+    private async Task SelectStudentAsync(Guid id)
+    {
+        _formStudentId = id.ToString();
+
+        await LoadStudentAsync(id);
+        await LoadFeeSummaryAsync(id);
+
+        if (_amount <= 0 && _dueValue > 0)
+            _amount = _dueValue;
+    }
+
+    private async Task LoadStudentAsync(Guid id)
+    {
+        try
+        {
+            _loadingStudent = true;
+
+            var client = Auth.GetAuthorizedClient();
+            _student = await client.GetFromJsonAsync<StudentResponse>($"api/students/{id}");
+        }
+        catch (Exception ex)
+        {
+            _error = "Failed to load student: " + ex.Message;
+            _student = null;
+            Toast.ShowError("Failed to load student details.");
+        }
+        finally
+        {
+            _loadingStudent = false;
+        }
+    }
+
+    private async Task LoadFeeSummaryAsync(Guid id)
+    {
+        try
+        {
+            _loadingSummary = true;
+
+            var client = Auth.GetAuthorizedClient();
+            var res = await client.GetAsync($"api/fees/student/{id}/summary");
+
+            if (!res.IsSuccessStatusCode)
+            {
+                _paid = "0";
+                _due = "0";
+                _dueValue = 0;
+                return;
+            }
+
+            var json = await res.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(json);
+
+            var root = doc.RootElement;
+
+            _paid = GetText(root, "paid", "Paid", "paidAmount", "PaidAmount");
+            _due = GetText(root, "due", "Due", "dueAmount", "DueAmount");
+            decimal.TryParse(_due, out _dueValue);
+        }
+        catch
+        {
+            _paid = "0";
+            _due = "0";
+            _dueValue = 0;
+            Toast.ShowWarning("Could not load fee summary.");
+        }
+        finally
+        {
+            _loadingSummary = false;
+        }
+    }
+
+    private async Task Pay()
+    {
+        if (!Auth.IsAdmin)
+        {
+            _error = "Only Admin can pay fees.";
+            Toast.ShowWarning("Access denied.");
+            return;
+        }
+
+        _error = null;
+        _success = null;
+
+        if (_student == null)
+        {
+            _error = "Please select a student.";
+            Toast.ShowWarning("Please select a student.");
+            return;
+        }
+
+        if (!Guid.TryParse(_formStudentId, out var sid))
+        {
+            _error = "Invalid Student Id.";
+            Toast.ShowError("Invalid student id.");
+            return;
+        }
+
+        if (_amount <= 0)
+        {
+            _error = "Amount must be greater than 0.";
+            Toast.ShowWarning("Amount must be greater than 0.");
+            return;
+        }
+
+        if (_dueValue > 0 && _amount > _dueValue)
+        {
+            _error = $"Amount cannot be greater than Due ({_dueValue}).";
+            Toast.ShowWarning("Amount cannot be greater than due.");
+            return;
+        }
+
+        try
+        {
+            var client = Auth.GetAuthorizedClient();
+
+            var payload = new
+            {
+                studentId = sid,
+                amount = _amount
+            };
+
+            var res = await client.PostAsJsonAsync("api/fees/pay", payload);
+
+            if (!res.IsSuccessStatusCode)
+            {
+                var body = await res.Content.ReadAsStringAsync();
+                _error = $"Pay failed: {res.StatusCode}. {body}";
+                Toast.ShowError("Fee payment failed.");
+                return;
+            }
+
+            Toast.ShowSuccess("Fee paid successfully.");
+            Nav.NavigateTo($"/fees/student/{sid}/summary");
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+            Toast.ShowError("Something went wrong while paying fee.");
+        }
+    }
+
+    private void Back() => Nav.NavigateTo("/fees");
+
+    private static string GetText(JsonElement obj, params string[] keys)
+    {
+        foreach (var k in keys)
+        {
+            if (obj.ValueKind == JsonValueKind.Object && obj.TryGetProperty(k, out var p))
+                return p.ToString();
+        }
+        return "0";
+    }
+}

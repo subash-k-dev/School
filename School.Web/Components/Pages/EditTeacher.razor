@@ -1,0 +1,158 @@
+﻿@page "/teachers/edit/{Id:guid}"
+@using School.Application.DTOs.Teachers
+@using School.Web.Services
+@inject AuthService Auth
+@inject NavigationManager Nav
+@inject ToastService Toast
+
+<PageTitle>Edit Teacher</PageTitle>
+
+<h3>Edit Teacher</h3>
+
+@if (!Auth.IsLoggedIn)
+{
+    <p>Redirecting to login...</p>
+}
+else if (!Auth.IsAdmin)
+{
+    <div class="alert alert-warning">
+        You do not have permission to edit teachers. Only <b>Admin</b> can access this page.
+    </div>
+
+    <button class="btn btn-secondary" @onclick="Cancel">Back</button>
+}
+else if (_loading)
+{
+    <p>Loading...</p>
+}
+else if (!string.IsNullOrEmpty(_error))
+{
+    <div class="alert alert-danger">@_error</div>
+}
+else
+{
+    <div class="card p-4">
+
+        <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input class="form-control" @bind="_form.Name" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Subject</label>
+            <input class="form-control" @bind="_form.Subject" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Phone</label>
+            <input class="form-control" @bind="_form.Phone" />
+        </div>
+
+        <button class="btn btn-success me-2" @onclick="Save">Update</button>
+        <button class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+
+    </div>
+}
+
+@code {
+    [Parameter] public Guid Id { get; set; }
+
+    private bool _loading = true;
+    private string? _error;
+
+    private TeacherEditForm _form = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        if (!Auth.IsLoggedIn)
+        {
+            Nav.NavigateTo("/login");
+            return;
+        }
+
+        if (!Auth.IsAdmin)
+        {
+            _loading = false;
+            StateHasChanged();
+            return;
+        }
+
+        await LoadTeacherAsync();
+        StateHasChanged();
+    }
+
+    private async Task LoadTeacherAsync()
+    {
+        try
+        {
+            var client = Auth.GetAuthorizedClient();
+            var teacher = await client.GetFromJsonAsync<TeacherResponse>($"api/teachers/{Id}");
+
+            if (teacher == null)
+            {
+                _error = "Teacher not found";
+                return;
+            }
+
+            _form.Name = teacher.Name;
+            _form.Subject = teacher.Subject;
+            _form.Phone = teacher.Phone;
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private async Task Save()
+    {
+        if (!Auth.IsAdmin)
+        {
+            _error = "Access denied.";
+            return;
+        }
+
+        try
+        {
+            _error = null;
+
+            var req = new UpdateTeacherRequest(
+                _form.Name,
+                _form.Subject,
+                _form.Phone
+            );
+
+            var client = Auth.GetAuthorizedClient();
+            var res = await client.PutAsJsonAsync($"api/teachers/{Id}", req);
+
+            if (!res.IsSuccessStatusCode)
+            {
+                _error = $"Update failed: {res.StatusCode}";
+                return;
+            }
+
+            Toast.ShowSuccess("Teacher updated successfully.");
+            Nav.NavigateTo("/teachers");
+           
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+    }
+
+    private void Cancel() => Nav.NavigateTo("/teachers");
+
+    private class TeacherEditForm
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Subject { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+    }
+}

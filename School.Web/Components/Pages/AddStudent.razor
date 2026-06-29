@@ -1,0 +1,133 @@
+﻿@page "/students/add"
+@using School.Application.DTOs.Students
+@using School.Web.Services
+@inject AuthService Auth
+@inject NavigationManager Nav
+@inject ToastService Toast
+
+<PageTitle>Add Student</PageTitle>
+
+<h3>Add Student</h3>
+
+@if (!Auth.IsLoggedIn)
+{
+    <p>Redirecting to login...</p>
+}
+else if (!Auth.IsAdmin)
+{
+    <div class="alert alert-warning">
+        You do not have permission to add students. Only <b>Admin</b> can access this page.
+    </div>
+
+    <button class="btn btn-secondary" @onclick="Cancel">Back</button>
+}
+else
+{
+    @if (!string.IsNullOrEmpty(_error))
+    {
+        <div class="alert alert-danger">@_error</div>
+    }
+
+    <div class="card p-4">
+              
+        <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input class="form-control" @bind="_form.Name" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Roll Number</label>
+            <input class="form-control" @bind="_form.RollNumber" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Age</label>
+            <input type="number" class="form-control" @bind="_form.Age" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Class</label>
+            <input class="form-control" @bind="_form.Class" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Total Fee</label>
+            <input type="number" class="form-control" @bind="_form.TotalFee" />
+        </div>
+
+        <button class="btn btn-success me-2" @onclick="Save">Save</button>
+        <button class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+
+    </div>
+}
+
+@code {
+
+    private string? _error;
+
+    private StudentCreateForm _form = new();
+
+    protected override void OnInitialized()
+    {
+        if (!Auth.IsLoggedIn)
+        {
+            Nav.NavigateTo("/login");
+            return;
+        }
+
+        if (!Auth.IsAdmin)
+        {
+            return;
+        }
+    }
+
+    private async Task Save()
+    {
+        if (!Auth.IsAdmin)
+        {
+            _error = "Access denied.";
+            return;
+        }
+
+        try
+        {
+            _error = null;
+
+            var req = new CreateStudentRequest(
+                _form.RollNumber,
+                _form.Name,
+                _form.Age,
+                _form.Class,
+                _form.TotalFee
+            );
+
+            var client = Auth.GetAuthorizedClient();
+            var response = await client.PostAsJsonAsync("api/students", req);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _error = $"Save failed: {response.StatusCode}";
+                Toast.ShowError("Failed to add student.");
+                return;
+            }
+
+            Toast.ShowSuccess("Student added successfully.");
+            Nav.NavigateTo("/students");
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+    }
+
+    private void Cancel() => Nav.NavigateTo("/students");
+
+    private class StudentCreateForm
+    {
+        public string RollNumber { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public int Age { get; set; }
+        public string Class { get; set; } = string.Empty;
+        public decimal TotalFee { get; set; }
+    }
+}

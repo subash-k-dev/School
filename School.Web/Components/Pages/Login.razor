@@ -1,0 +1,156 @@
+﻿@page "/login"
+@using School.Web.Services
+@inject AuthService Auth
+@inject NavigationManager Nav
+
+<PageTitle>Login</PageTitle>
+
+<div class="login-bg d-flex align-items-center justify-content-center">
+    <div class="card shadow-lg border-0 login-card">
+        <div class="card-body p-4">
+
+            <div class="text-center mb-4">
+                <div class="login-logo mb-2">🏫</div>
+                <h3 class="mb-1">School Management</h3>
+                <div class="text-muted small">Sign in to continue</div>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(errorMessage))
+            {
+                <div class="alert alert-danger py-2" role="alert">
+                    @errorMessage
+                </div>
+            }
+
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input class="form-control" placeholder="Enter username"
+                       @bind="username" @bind:event="oninput" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+
+                <div class="input-group">
+                    <input class="form-control"
+                           type="@(_showPassword ? "text" : "password")"
+                           placeholder="Enter password"
+                           @bind="password" @bind:event="oninput" />
+
+                    <button class="btn btn-outline-secondary" type="button" @onclick="TogglePassword">
+                        @(_showPassword ? "Hide" : "Show")
+                    </button>
+                </div>
+            </div>
+
+            <button class="btn btn-primary w-100"
+                    disabled="@_isSubmitting"
+                    @onclick="LoginUser">
+                @if (_isSubmitting)
+                {
+                    <span>Signing in...</span>
+                }
+                else
+                {
+                    <span>Login</span>
+                }
+            </button>
+
+            <div class="text-center mt-3 text-muted small">
+                Use your admin/teacher credentials
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .login-bg {
+        min-height: 100vh;
+        width: 100%;
+        background: linear-gradient(135deg, #0d6efd 0%, #6f42c1 100%);
+        padding: 24px;
+        /* Center content */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* Avoid horizontal scroll due to 100vw issues */
+        overflow-x: hidden;
+    }
+
+    .login-card {
+        width: 420px;
+        max-width: 100%;
+        border-radius: 16px;
+        background: #fff;
+    }
+
+    .login-logo {
+        width: 54px;
+        height: 54px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 14px;
+        background: rgba(13, 110, 253, 0.12);
+        font-size: 28px;
+    }
+</style>
+
+@code {
+    private string username = "";
+    private string password = "";
+    private string? errorMessage;
+
+    private bool _showPassword;
+    private bool _isSubmitting;
+
+    private void TogglePassword() => _showPassword = !_showPassword;
+
+    private async Task LoginUser()
+    {
+        if (_isSubmitting) return;
+
+        errorMessage = null;
+
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+        {
+            errorMessage = "Please enter username and password.";
+            return;
+        }
+
+        _isSubmitting = true;
+
+        try
+        {
+            var success = await Auth.LoginAsync(username, password);
+
+            if (success)
+            {
+                Nav.NavigateTo("/home");
+            }
+            else
+            {
+                errorMessage = "Invalid credentials.";
+            }
+        }
+        finally
+        {
+            _isSubmitting = false;
+        }
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender && Auth.IsLoggedIn)
+        {
+            Nav.NavigateTo("/home");
+        }
+    }
+}

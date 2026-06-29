@@ -1,0 +1,19 @@
+﻿@page "/home"
+@inject School.Web.Services.AuthService Auth
+@inject NavigationManager Nav
+
+<PageTitle>Home</PageTitle>
+
+<p>Redirecting...</p>
+
+@code {
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        if (!Auth.IsLoggedIn)
+            Nav.NavigateTo("/login");
+        else
+            Nav.NavigateTo("/dashboard");
+    }
+}

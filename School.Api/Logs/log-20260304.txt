@@ -1,0 +1,676 @@
+2026-03-04 10:27:15.263 +05:30 [INF] Starting School API
+2026-03-04 10:27:43.817 +05:30 [INF] HTTP POST /api/auth/login responded 200 in 2219.5976 ms
+2026-03-04 11:00:25.079 +05:30 [INF] Starting School API
+2026-03-04 11:01:36.088 +05:30 [INF] Starting School API
+2026-03-04 11:10:28.161 +05:30 [INF] Starting School API
+2026-03-04 11:10:39.214 +05:30 [INF] HTTP POST /api/auth/login responded 200 in 451.4517 ms
+2026-03-04 11:10:47.041 +05:30 [INF] HTTP POST /api/auth/login responded 200 in 226.0679 ms
+2026-03-04 11:10:50.221 +05:30 [INF] HTTP POST /api/auth/login responded 401 in 19.5634 ms
+2026-03-04 11:10:50.783 +05:30 [INF] HTTP POST /api/auth/login responded 401 in 9.6703 ms
+2026-03-04 11:10:51.469 +05:30 [INF] HTTP POST /api/auth/login responded 401 in 13.3711 ms
+2026-03-04 11:10:57.798 +05:30 [INF] HTTP POST /api/auth/login responded 401 in 93.3340 ms
+2026-03-04 11:11:00.599 +05:30 [INF] HTTP POST /api/auth/login responded 200 in 95.1746 ms
+2026-03-04 11:14:30.762 +05:30 [INF] Starting School API
+2026-03-04 11:14:39.189 +05:30 [INF] HTTP POST /api/auth/login responded 200 in 428.6136 ms
+2026-03-04 12:30:52.441 +05:30 [INF] Starting School API
+2026-03-04 12:31:02.162 +05:30 [INF] HTTP POST /api/auth/login responded 200 in 426.2326 ms
+2026-03-04 12:51:08.245 +05:30 [INF] Starting School API
+2026-03-04 12:51:19.015 +05:30 [INF] HTTP POST /api/auth/login responded 200 in 415.9036 ms
+2026-03-04 13:20:39.843 +05:30 [INF] Starting School API
+2026-03-04 13:24:47.687 +05:30 [INF] Starting School API
+2026-03-04 13:24:59.661 +05:30 [INF] HTTP POST /api/auth/login responded 200 in 383.0736 ms
+2026-03-04 13:27:07.252 +05:30 [INF] Starting School API
+2026-03-04 13:27:21.721 +05:30 [INF] HTTP POST /api/auth/login responded 200 in 355.9315 ms
+2026-03-04 13:28:09.108 +05:30 [INF] HTTP POST /api/auth/login responded 200 in 169.3053 ms
+2026-03-04 17:40:25.677 +05:30 [INF] Starting School API
+2026-03-04 17:40:47.128 +05:30 [INF] HTTP POST /api/Auth/login responded 200 in 2641.0172 ms
+2026-03-04 17:42:24.497 +05:30 [ERR] Failed executing DbCommand (29ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = Int32), @p3='?', @p4='?', @p5='?' (DbType = DateTime), @p6='?' (DbType = DateTime), @p7='?', @p8='?' (DbType = Int32), @p9='?', @p10='?', @p11='?' (DbType = Int32), @p12='?' (DbType = Decimal)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Students" ("Id", "AdmissionNumber", "Age", "Class", "ClassName", "CreatedOn", "DateOfBirth", "FirstName", "Gender", "LastName", "Name", "Status", "TotalFee")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12);
+2026-03-04 17:42:24.539 +05:30 [ERR] An exception occurred in the database while saving changes for context type 'School.Infrastructure.Persistence.AppDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> System.ArgumentException: Cannot write DateTime with Kind=Unspecified to PostgreSQL type 'timestamp with time zone', only UTC is supported. Note that it's not possible to mix DateTimes with different Kinds in an array, range, or multirange. (Parameter 'value')
+   at Npgsql.Internal.Converters.DateTimeConverterResolver`1.Get(DateTime value, Nullable`1 expectedPgTypeId, Boolean validateOnly)
+   at Npgsql.Internal.Converters.DateTimeConverterResolver.<>c.<CreateResolver>b__0_0(DateTimeConverterResolver`1 resolver, DateTime value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.Converters.DateTimeConverterResolver`1.Get(T value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgConverterResolver`1.GetAsObjectInternal(PgTypeInfo typeInfo, Object value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgResolverTypeInfo.GetResolutionAsObject(Object value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgTypeInfo.GetObjectResolution(Object value)
+   at Npgsql.NpgsqlParameter.ResolveConverter(PgTypeInfo typeInfo)
+   at Npgsql.NpgsqlParameter.ResolveTypeInfo(PgSerializerOptions options)
+   at Npgsql.NpgsqlParameterCollection.ProcessParameters(PgSerializerOptions options, Boolean validateValues, CommandType commandType)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> System.ArgumentException: Cannot write DateTime with Kind=Unspecified to PostgreSQL type 'timestamp with time zone', only UTC is supported. Note that it's not possible to mix DateTimes with different Kinds in an array, range, or multirange. (Parameter 'value')
+   at Npgsql.Internal.Converters.DateTimeConverterResolver`1.Get(DateTime value, Nullable`1 expectedPgTypeId, Boolean validateOnly)
+   at Npgsql.Internal.Converters.DateTimeConverterResolver.<>c.<CreateResolver>b__0_0(DateTimeConverterResolver`1 resolver, DateTime value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.Converters.DateTimeConverterResolver`1.Get(T value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgConverterResolver`1.GetAsObjectInternal(PgTypeInfo typeInfo, Object value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgResolverTypeInfo.GetResolutionAsObject(Object value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgTypeInfo.GetObjectResolution(Object value)
+   at Npgsql.NpgsqlParameter.ResolveConverter(PgTypeInfo typeInfo)
+   at Npgsql.NpgsqlParameter.ResolveTypeInfo(PgSerializerOptions options)
+   at Npgsql.NpgsqlParameterCollection.ProcessParameters(PgSerializerOptions options, Boolean validateValues, CommandType commandType)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2026-03-04 17:42:24.716 +05:30 [ERR] Unhandled exception
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> System.ArgumentException: Cannot write DateTime with Kind=Unspecified to PostgreSQL type 'timestamp with time zone', only UTC is supported. Note that it's not possible to mix DateTimes with different Kinds in an array, range, or multirange. (Parameter 'value')
+   at Npgsql.Internal.Converters.DateTimeConverterResolver`1.Get(DateTime value, Nullable`1 expectedPgTypeId, Boolean validateOnly)
+   at Npgsql.Internal.Converters.DateTimeConverterResolver.<>c.<CreateResolver>b__0_0(DateTimeConverterResolver`1 resolver, DateTime value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.Converters.DateTimeConverterResolver`1.Get(T value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgConverterResolver`1.GetAsObjectInternal(PgTypeInfo typeInfo, Object value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgResolverTypeInfo.GetResolutionAsObject(Object value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgTypeInfo.GetObjectResolution(Object value)
+   at Npgsql.NpgsqlParameter.ResolveConverter(PgTypeInfo typeInfo)
+   at Npgsql.NpgsqlParameter.ResolveTypeInfo(PgSerializerOptions options)
+   at Npgsql.NpgsqlParameterCollection.ProcessParameters(PgSerializerOptions options, Boolean validateValues, CommandType commandType)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at School.Infrastructure.Repositories.StudentRepository.AddAsync(Student student) in D:\SCB\School\School\School.Infrastructure\Repositories\StudentRepository.cs:line 26
+   at School.Application.Services.StudentService.CreateAsync(CreateStudentRequest req) in D:\SCB\School\School\School.Application\Services\StudentService.cs:line 38
+   at School.Api.Controllers.StudentsController.Create(CreateStudentRequest req) in D:\SCB\School\School\School.Api\Controllers\StudentsController.cs:line 35
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at School.Api.Middleware.ExceptionMiddleware.Invoke(HttpContext context) in D:\SCB\School\School\School.Api\Middleware\ExceptionMiddleware.cs:line 24
+2026-03-04 17:42:24.812 +05:30 [ERR] HTTP POST /api/Students responded 500 in 717.1352 ms
+2026-03-04 17:43:15.075 +05:30 [ERR] Failed executing DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."AdmissionNumber", s."Age", s."Class", s."ClassName", s."CreatedOn", s."DateOfBirth", s."FirstName", s."Gender", s."LastName", s."Name", s."Status", s."TotalFee"
+FROM "Students" AS s
+2026-03-04 17:43:15.087 +05:30 [ERR] An exception occurred while iterating over the results of a query for context type 'School.Infrastructure.Persistence.AppDbContext'.
+Npgsql.PostgresException (0x80004005): 42703: column s.AdmissionNumber does not exist
+
+POSITION: 16
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column s.AdmissionNumber does not exist
+    Position: 16
+    File: parse_relation.c
+    Line: 3827
+    Routine: errorMissingColumn
+Npgsql.PostgresException (0x80004005): 42703: column s.AdmissionNumber does not exist
+
+POSITION: 16
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column s.AdmissionNumber does not exist
+    Position: 16
+    File: parse_relation.c
+    Line: 3827
+    Routine: errorMissingColumn
+2026-03-04 17:43:15.262 +05:30 [ERR] Unhandled exception
+Npgsql.PostgresException (0x80004005): 42703: column s.AdmissionNumber does not exist
+
+POSITION: 16
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at School.Application.Services.StudentService.GetAllAsync() in D:\SCB\School\School\School.Application\Services\StudentService.cs:line 18
+   at School.Api.Controllers.StudentsController.GetAll() in D:\SCB\School\School\School.Api\Controllers\StudentsController.cs:line 23
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at School.Api.Middleware.ExceptionMiddleware.Invoke(HttpContext context) in D:\SCB\School\School\School.Api\Middleware\ExceptionMiddleware.cs:line 24
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column s.AdmissionNumber does not exist
+    Position: 16
+    File: parse_relation.c
+    Line: 3827
+    Routine: errorMissingColumn
+2026-03-04 17:43:15.295 +05:30 [ERR] HTTP GET /api/Students responded 500 in 265.3475 ms
+2026-03-04 17:45:29.764 +05:30 [ERR] Failed executing DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."AdmissionNumber", s."Age", s."Class", s."ClassName", s."CreatedOn", s."DateOfBirth", s."FirstName", s."Gender", s."LastName", s."Name", s."Status", s."TotalFee"
+FROM "Students" AS s
+2026-03-04 17:45:29.770 +05:30 [ERR] An exception occurred while iterating over the results of a query for context type 'School.Infrastructure.Persistence.AppDbContext'.
+Npgsql.PostgresException (0x80004005): 42703: column s.AdmissionNumber does not exist
+
+POSITION: 16
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column s.AdmissionNumber does not exist
+    Position: 16
+    File: parse_relation.c
+    Line: 3827
+    Routine: errorMissingColumn
+Npgsql.PostgresException (0x80004005): 42703: column s.AdmissionNumber does not exist
+
+POSITION: 16
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column s.AdmissionNumber does not exist
+    Position: 16
+    File: parse_relation.c
+    Line: 3827
+    Routine: errorMissingColumn
+2026-03-04 17:45:29.917 +05:30 [ERR] Unhandled exception
+Npgsql.PostgresException (0x80004005): 42703: column s.AdmissionNumber does not exist
+
+POSITION: 16
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at School.Application.Services.StudentService.GetAllAsync() in D:\SCB\School\School\School.Application\Services\StudentService.cs:line 18
+   at School.Api.Controllers.StudentsController.GetAll() in D:\SCB\School\School\School.Api\Controllers\StudentsController.cs:line 23
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at School.Api.Middleware.ExceptionMiddleware.Invoke(HttpContext context) in D:\SCB\School\School\School.Api\Middleware\ExceptionMiddleware.cs:line 24
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column s.AdmissionNumber does not exist
+    Position: 16
+    File: parse_relation.c
+    Line: 3827
+    Routine: errorMissingColumn
+2026-03-04 17:45:29.944 +05:30 [ERR] HTTP GET /api/Students responded 500 in 262.3483 ms
+2026-03-04 17:47:14.200 +05:30 [INF] Starting School API
+2026-03-04 17:47:36.225 +05:30 [INF] HTTP POST /api/Auth/login responded 200 in 361.9664 ms
+2026-03-04 17:47:56.683 +05:30 [ERR] Failed executing DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."AdmissionNumber", s."Age", s."Class", s."ClassName", s."CreatedOn", s."DateOfBirth", s."FirstName", s."Gender", s."LastName", s."Name", s."Status", s."TotalFee"
+FROM "Students" AS s
+2026-03-04 17:47:56.716 +05:30 [ERR] An exception occurred while iterating over the results of a query for context type 'School.Infrastructure.Persistence.AppDbContext'.
+Npgsql.PostgresException (0x80004005): 42703: column s.AdmissionNumber does not exist
+
+POSITION: 16
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column s.AdmissionNumber does not exist
+    Position: 16
+    File: parse_relation.c
+    Line: 3827
+    Routine: errorMissingColumn
+Npgsql.PostgresException (0x80004005): 42703: column s.AdmissionNumber does not exist
+
+POSITION: 16
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column s.AdmissionNumber does not exist
+    Position: 16
+    File: parse_relation.c
+    Line: 3827
+    Routine: errorMissingColumn
+2026-03-04 17:47:56.895 +05:30 [ERR] Unhandled exception
+Npgsql.PostgresException (0x80004005): 42703: column s.AdmissionNumber does not exist
+
+POSITION: 16
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at School.Application.Services.StudentService.GetAllAsync() in D:\SCB\School\School\School.Application\Services\StudentService.cs:line 18
+   at School.Api.Controllers.StudentsController.GetAll() in D:\SCB\School\School\School.Api\Controllers\StudentsController.cs:line 23
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at School.Api.Middleware.ExceptionMiddleware.Invoke(HttpContext context) in D:\SCB\School\School\School.Api\Middleware\ExceptionMiddleware.cs:line 24
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column s.AdmissionNumber does not exist
+    Position: 16
+    File: parse_relation.c
+    Line: 3827
+    Routine: errorMissingColumn
+2026-03-04 17:47:56.930 +05:30 [ERR] HTTP GET /api/Students responded 500 in 427.6928 ms
+2026-03-04 17:58:09.709 +05:30 [INF] Starting School API
+2026-03-04 17:58:48.013 +05:30 [INF] HTTP POST /api/Auth/login responded 200 in 426.7317 ms
+2026-03-04 17:59:18.900 +05:30 [INF] HTTP GET /api/Students responded 200 in 224.9200 ms
+2026-03-04 18:00:02.264 +05:30 [ERR] Failed executing DbCommand (6ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = Int32), @p3='?', @p4='?', @p5='?' (DbType = DateTime), @p6='?' (DbType = DateTime), @p7='?', @p8='?' (DbType = Int32), @p9='?', @p10='?', @p11='?' (DbType = Int32), @p12='?' (DbType = Decimal)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Students" ("Id", "AdmissionNumber", "Age", "Class", "ClassName", "CreatedOn", "DateOfBirth", "FirstName", "Gender", "LastName", "Name", "Status", "TotalFee")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12);
+2026-03-04 18:00:02.304 +05:30 [ERR] An exception occurred in the database while saving changes for context type 'School.Infrastructure.Persistence.AppDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> System.ArgumentException: Cannot write DateTime with Kind=Unspecified to PostgreSQL type 'timestamp with time zone', only UTC is supported. Note that it's not possible to mix DateTimes with different Kinds in an array, range, or multirange. (Parameter 'value')
+   at Npgsql.Internal.Converters.DateTimeConverterResolver`1.Get(DateTime value, Nullable`1 expectedPgTypeId, Boolean validateOnly)
+   at Npgsql.Internal.Converters.DateTimeConverterResolver.<>c.<CreateResolver>b__0_0(DateTimeConverterResolver`1 resolver, DateTime value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.Converters.DateTimeConverterResolver`1.Get(T value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgConverterResolver`1.GetAsObjectInternal(PgTypeInfo typeInfo, Object value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgResolverTypeInfo.GetResolutionAsObject(Object value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgTypeInfo.GetObjectResolution(Object value)
+   at Npgsql.NpgsqlParameter.ResolveConverter(PgTypeInfo typeInfo)
+   at Npgsql.NpgsqlParameter.ResolveTypeInfo(PgSerializerOptions options)
+   at Npgsql.NpgsqlParameterCollection.ProcessParameters(PgSerializerOptions options, Boolean validateValues, CommandType commandType)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> System.ArgumentException: Cannot write DateTime with Kind=Unspecified to PostgreSQL type 'timestamp with time zone', only UTC is supported. Note that it's not possible to mix DateTimes with different Kinds in an array, range, or multirange. (Parameter 'value')
+   at Npgsql.Internal.Converters.DateTimeConverterResolver`1.Get(DateTime value, Nullable`1 expectedPgTypeId, Boolean validateOnly)
+   at Npgsql.Internal.Converters.DateTimeConverterResolver.<>c.<CreateResolver>b__0_0(DateTimeConverterResolver`1 resolver, DateTime value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.Converters.DateTimeConverterResolver`1.Get(T value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgConverterResolver`1.GetAsObjectInternal(PgTypeInfo typeInfo, Object value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgResolverTypeInfo.GetResolutionAsObject(Object value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgTypeInfo.GetObjectResolution(Object value)
+   at Npgsql.NpgsqlParameter.ResolveConverter(PgTypeInfo typeInfo)
+   at Npgsql.NpgsqlParameter.ResolveTypeInfo(PgSerializerOptions options)
+   at Npgsql.NpgsqlParameterCollection.ProcessParameters(PgSerializerOptions options, Boolean validateValues, CommandType commandType)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2026-03-04 18:00:02.459 +05:30 [ERR] Unhandled exception
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> System.ArgumentException: Cannot write DateTime with Kind=Unspecified to PostgreSQL type 'timestamp with time zone', only UTC is supported. Note that it's not possible to mix DateTimes with different Kinds in an array, range, or multirange. (Parameter 'value')
+   at Npgsql.Internal.Converters.DateTimeConverterResolver`1.Get(DateTime value, Nullable`1 expectedPgTypeId, Boolean validateOnly)
+   at Npgsql.Internal.Converters.DateTimeConverterResolver.<>c.<CreateResolver>b__0_0(DateTimeConverterResolver`1 resolver, DateTime value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.Converters.DateTimeConverterResolver`1.Get(T value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgConverterResolver`1.GetAsObjectInternal(PgTypeInfo typeInfo, Object value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgResolverTypeInfo.GetResolutionAsObject(Object value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgTypeInfo.GetObjectResolution(Object value)
+   at Npgsql.NpgsqlParameter.ResolveConverter(PgTypeInfo typeInfo)
+   at Npgsql.NpgsqlParameter.ResolveTypeInfo(PgSerializerOptions options)
+   at Npgsql.NpgsqlParameterCollection.ProcessParameters(PgSerializerOptions options, Boolean validateValues, CommandType commandType)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at School.Infrastructure.Repositories.StudentRepository.AddAsync(Student student) in D:\SCB\School\School\School.Infrastructure\Repositories\StudentRepository.cs:line 26
+   at School.Application.Services.StudentService.CreateAsync(CreateStudentRequest req) in D:\SCB\School\School\School.Application\Services\StudentService.cs:line 38
+   at School.Api.Controllers.StudentsController.Create(CreateStudentRequest req) in D:\SCB\School\School\School.Api\Controllers\StudentsController.cs:line 35
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at School.Api.Middleware.ExceptionMiddleware.Invoke(HttpContext context) in D:\SCB\School\School\School.Api\Middleware\ExceptionMiddleware.cs:line 24
+2026-03-04 18:00:02.517 +05:30 [ERR] HTTP POST /api/Students responded 500 in 465.5328 ms
+2026-03-04 18:00:29.945 +05:30 [INF] HTTP GET /api/Students/77164845-9504-4d4d-adc6-823c48db76f4 responded 200 in 48.7135 ms
+2026-03-04 18:04:45.637 +05:30 [INF] Starting School API
+2026-03-04 18:05:01.004 +05:30 [INF] HTTP POST /api/Auth/login responded 200 in 414.7896 ms
+2026-03-04 18:05:26.469 +05:30 [INF] HTTP POST /api/Students responded 200 in 407.6265 ms
+2026-03-04 18:16:33.161 +05:30 [INF] Starting School API
+2026-03-04 18:16:53.114 +05:30 [INF] Starting School API
+2026-03-04 18:19:12.395 +05:30 [INF] Starting School API
+2026-03-04 18:19:27.751 +05:30 [INF] HTTP POST /api/auth/login responded 200 in 417.6105 ms
+2026-03-04 18:19:30.475 +05:30 [INF] HTTP GET /api/students responded 200 in 208.9059 ms
+2026-03-04 18:19:39.363 +05:30 [INF] HTTP GET /api/students responded 200 in 15.9207 ms
+2026-03-04 18:24:36.067 +05:30 [INF] Starting School API
+2026-03-04 18:24:46.718 +05:30 [INF] HTTP POST /api/auth/login responded 200 in 433.7168 ms
+2026-03-04 18:24:50.244 +05:30 [INF] HTTP GET /api/students responded 200 in 206.8865 ms
+2026-03-04 18:25:36.944 +05:30 [INF] HTTP POST /api/students responded 200 in 233.4415 ms
+2026-03-04 18:25:36.989 +05:30 [INF] HTTP GET /api/students responded 200 in 17.2096 ms
+2026-03-04 18:29:33.240 +05:30 [INF] Starting School API
+2026-03-04 18:29:43.606 +05:30 [INF] HTTP POST /api/auth/login responded 200 in 2087.7305 ms
+2026-03-04 18:29:45.802 +05:30 [INF] HTTP GET /api/students responded 200 in 205.2175 ms
+2026-03-04 18:29:50.256 +05:30 [INF] HTTP GET /api/students/77164845-9504-4d4d-adc6-823c48db76f4 responded 200 in 75.7880 ms
+2026-03-04 18:30:07.139 +05:30 [INF] HTTP PUT /api/students/77164845-9504-4d4d-adc6-823c48db76f4 responded 200 in 189.3321 ms
+2026-03-04 18:30:07.168 +05:30 [INF] HTTP GET /api/students responded 200 in 6.7707 ms
+2026-03-04 18:48:45.487 +05:30 [INF] Starting School API
+2026-03-04 18:49:17.815 +05:30 [INF] HTTP POST /api/auth/login responded 200 in 419.3006 ms
+2026-03-04 18:49:20.362 +05:30 [INF] HTTP GET /api/fees responded 404 in 67.4747 ms
+2026-03-04 18:49:20.362 +05:30 [INF] HTTP GET /api/attendance responded 404 in 62.5427 ms
+2026-03-04 18:49:20.537 +05:30 [INF] HTTP GET /api/students responded 200 in 300.6149 ms
+2026-03-04 18:49:20.543 +05:30 [INF] HTTP GET /api/teachers responded 200 in 253.2374 ms
+2026-03-04 18:49:36.893 +05:30 [INF] HTTP GET /api/students responded 200 in 12.4824 ms
+2026-03-04 18:49:40.173 +05:30 [INF] HTTP GET /api/students responded 200 in 16.8111 ms
+2026-03-04 18:49:40.173 +05:30 [INF] HTTP GET /api/fees responded 404 in 0.4917 ms
+2026-03-04 18:49:40.191 +05:30 [INF] HTTP GET /api/teachers responded 200 in 22.7774 ms
+2026-03-04 18:49:40.204 +05:30 [INF] HTTP GET /api/attendance responded 404 in 2.2800 ms
+2026-03-04 18:49:41.316 +05:30 [INF] HTTP GET /api/students responded 200 in 10.0717 ms
+2026-03-04 18:49:43.326 +05:30 [INF] HTTP GET /api/students responded 200 in 12.2185 ms
+2026-03-04 18:49:43.343 +05:30 [INF] HTTP GET /api/teachers responded 200 in 17.3033 ms
+2026-03-04 18:49:43.343 +05:30 [INF] HTTP GET /api/fees responded 404 in 1.2087 ms
+2026-03-04 18:49:43.358 +05:30 [INF] HTTP GET /api/attendance responded 404 in 1.2093 ms
+2026-03-04 18:49:47.620 +05:30 [INF] HTTP GET /api/students responded 200 in 13.8169 ms
+2026-03-04 18:49:47.636 +05:30 [INF] HTTP GET /api/fees responded 404 in 0.6414 ms
+2026-03-04 18:49:47.637 +05:30 [INF] HTTP GET /api/teachers responded 200 in 18.2480 ms
+2026-03-04 18:49:47.667 +05:30 [INF] HTTP GET /api/attendance responded 404 in 0.9602 ms
+2026-03-04 18:49:48.332 +05:30 [INF] HTTP GET /api/students responded 200 in 8.9072 ms
+2026-03-04 18:50:04.514 +05:30 [INF] HTTP GET /api/students responded 200 in 16.3417 ms
+2026-03-04 18:50:04.524 +05:30 [INF] HTTP GET /api/teachers responded 200 in 10.4054 ms
+2026-03-04 18:50:04.528 +05:30 [INF] HTTP GET /api/fees responded 404 in 0.6088 ms
+2026-03-04 18:50:04.552 +05:30 [INF] HTTP GET /api/attendance responded 404 in 0.8651 ms
+2026-03-04 18:50:35.100 +05:30 [INF] HTTP GET /api/students responded 200 in 19.3964 ms
+2026-03-04 18:50:35.102 +05:30 [INF] HTTP GET /api/fees responded 404 in 0.9166 ms
+2026-03-04 18:50:35.114 +05:30 [INF] HTTP GET /api/teachers responded 200 in 18.6207 ms
+2026-03-04 18:50:35.120 +05:30 [INF] HTTP GET /api/attendance responded 404 in 0.7611 ms
+2026-03-04 18:56:12.934 +05:30 [INF] Starting School API
+2026-03-04 18:56:22.458 +05:30 [INF] HTTP POST /api/auth/login responded 200 in 364.6199 ms
+2026-03-04 18:56:22.601 +05:30 [INF] HTTP GET /api/attendance responded 404 in 35.3884 ms
+2026-03-04 18:56:22.601 +05:30 [INF] HTTP GET /api/fees responded 404 in 35.3648 ms
+2026-03-04 18:56:22.724 +05:30 [INF] HTTP GET /api/teachers responded 200 in 166.1886 ms
+2026-03-04 18:56:22.779 +05:30 [INF] HTTP GET /api/students responded 200 in 249.6547 ms
+2026-03-04 18:56:26.383 +05:30 [INF] HTTP GET /api/students responded 200 in 11.7067 ms
+2026-03-04 18:56:27.523 +05:30 [INF] HTTP GET /api/students responded 200 in 14.5380 ms
+2026-03-04 18:56:27.527 +05:30 [INF] HTTP GET /api/fees responded 404 in 2.9494 ms
+2026-03-04 18:56:27.531 +05:30 [INF] HTTP GET /api/teachers responded 200 in 12.4927 ms
+2026-03-04 18:56:27.550 +05:30 [INF] HTTP GET /api/attendance responded 404 in 0.4686 ms
+2026-03-04 18:56:55.191 +05:30 [INF] Starting School API
+2026-03-04 18:57:04.531 +05:30 [INF] HTTP POST /api/auth/login responded 200 in 366.3615 ms
+2026-03-04 18:57:04.687 +05:30 [INF] HTTP GET /api/attendance responded 404 in 42.7113 ms
+2026-03-04 18:57:04.687 +05:30 [INF] HTTP GET /api/fees responded 404 in 47.3889 ms
+2026-03-04 18:57:04.800 +05:30 [INF] HTTP GET /api/teachers responded 200 in 164.9951 ms
+2026-03-04 18:57:04.842 +05:30 [INF] HTTP GET /api/students responded 200 in 234.8615 ms
+2026-03-04 18:57:06.832 +05:30 [INF] HTTP GET /api/students responded 200 in 11.3457 ms
+2026-03-04 18:57:08.088 +05:30 [INF] HTTP GET /api/students responded 200 in 14.1779 ms
+2026-03-04 18:57:08.090 +05:30 [INF] HTTP GET /api/fees responded 404 in 0.4185 ms
+2026-03-04 18:57:08.096 +05:30 [INF] HTTP GET /api/teachers responded 200 in 11.0277 ms
+2026-03-04 18:57:08.115 +05:30 [INF] HTTP GET /api/attendance responded 404 in 0.4091 ms
+2026-03-04 18:57:11.665 +05:30 [INF] HTTP GET /api/students responded 200 in 6.3305 ms
+2026-03-04 18:57:34.966 +05:30 [INF] HTTP POST /api/students responded 200 in 183.7589 ms
+2026-03-04 18:57:34.992 +05:30 [INF] HTTP GET /api/students responded 200 in 5.9406 ms
+2026-03-04 18:57:43.758 +05:30 [INF] HTTP GET /api/students/77164845-9504-4d4d-adc6-823c48db76f4 responded 200 in 23.0194 ms
+2026-03-04 18:57:49.499 +05:30 [INF] HTTP PUT /api/students/77164845-9504-4d4d-adc6-823c48db76f4 responded 200 in 33.7038 ms
+2026-03-04 18:57:49.527 +05:30 [INF] HTTP GET /api/students responded 200 in 6.0030 ms
+2026-03-04 18:58:09.210 +05:30 [INF] HTTP GET /api/students/77164845-9504-4d4d-adc6-823c48db76f4 responded 200 in 7.1056 ms
+2026-03-04 18:58:12.508 +05:30 [INF] HTTP PUT /api/students/77164845-9504-4d4d-adc6-823c48db76f4 responded 200 in 15.3601 ms
+2026-03-04 18:58:12.540 +05:30 [INF] HTTP GET /api/students responded 200 in 6.7830 ms
+2026-03-04 18:58:18.786 +05:30 [INF] HTTP GET /api/students/77164845-9504-4d4d-adc6-823c48db76f4 responded 200 in 6.7629 ms
+2026-03-04 18:58:23.663 +05:30 [INF] HTTP PUT /api/students/77164845-9504-4d4d-adc6-823c48db76f4 responded 200 in 15.7721 ms
+2026-03-04 18:58:23.686 +05:30 [INF] HTTP GET /api/students responded 200 in 4.3432 ms
+2026-03-04 18:58:38.142 +05:30 [INF] HTTP DELETE /api/students/77164845-9504-4d4d-adc6-823c48db76f4 responded 200 in 25.6009 ms
+2026-03-04 18:58:38.160 +05:30 [INF] HTTP GET /api/students responded 200 in 5.7531 ms
+2026-03-04 18:58:54.002 +05:30 [INF] HTTP POST /api/students responded 200 in 6.8414 ms
+2026-03-04 18:58:54.026 +05:30 [INF] HTTP GET /api/students responded 200 in 5.5127 ms
+2026-03-04 19:31:12.890 +05:30 [INF] Starting School API
+2026-03-04 19:31:22.338 +05:30 [INF] HTTP POST /api/auth/login responded 200 in 399.2506 ms
+2026-03-04 19:31:24.294 +05:30 [INF] HTTP GET /api/fees responded 404 in 38.6349 ms
+2026-03-04 19:31:24.294 +05:30 [INF] HTTP GET /api/attendance responded 404 in 38.6675 ms
+2026-03-04 19:31:24.409 +05:30 [INF] HTTP GET /api/teachers responded 200 in 164.4352 ms
+2026-03-04 19:31:24.451 +05:30 [INF] HTTP GET /api/students responded 200 in 243.7552 ms
+2026-03-04 19:31:34.887 +05:30 [INF] HTTP GET /api/students responded 200 in 15.2471 ms
+2026-03-04 19:31:34.893 +05:30 [INF] HTTP GET /api/fees responded 404 in 5.2379 ms
+2026-03-04 19:31:34.896 +05:30 [INF] HTTP GET /api/teachers responded 200 in 14.8470 ms
+2026-03-04 19:31:34.910 +05:30 [INF] HTTP GET /api/attendance responded 404 in 0.5798 ms
+2026-03-04 19:31:37.799 +05:30 [INF] HTTP GET /api/students responded 200 in 12.4601 ms
+2026-03-04 19:31:39.573 +05:30 [INF] HTTP GET /api/students responded 200 in 4.9518 ms
+2026-03-04 19:31:39.589 +05:30 [INF] HTTP GET /api/teachers responded 200 in 11.4945 ms
+2026-03-04 19:31:39.589 +05:30 [INF] HTTP GET /api/fees responded 404 in 0.4047 ms
+2026-03-04 19:31:39.611 +05:30 [INF] HTTP GET /api/attendance responded 404 in 0.4479 ms
+2026-03-04 19:31:41.938 +05:30 [INF] HTTP GET /api/students responded 200 in 7.5154 ms
+2026-03-04 19:31:45.674 +05:30 [INF] HTTP GET /api/students responded 200 in 8.9504 ms
+2026-03-04 19:31:45.684 +05:30 [INF] HTTP GET /api/teachers responded 200 in 10.5024 ms
+2026-03-04 19:31:45.685 +05:30 [INF] HTTP GET /api/fees responded 404 in 0.4846 ms
+2026-03-04 19:31:45.705 +05:30 [INF] HTTP GET /api/attendance responded 404 in 0.3889 ms
+2026-03-04 19:31:48.295 +05:30 [INF] HTTP GET /api/students responded 200 in 9.4735 ms
+2026-03-04 19:31:48.306 +05:30 [INF] HTTP GET /api/teachers responded 200 in 10.9965 ms
+2026-03-04 19:31:48.310 +05:30 [INF] HTTP GET /api/fees responded 404 in 0.4305 ms
+2026-03-04 19:31:48.330 +05:30 [INF] HTTP GET /api/attendance responded 404 in 0.4317 ms
+2026-03-04 19:31:55.613 +05:30 [INF] HTTP GET /api/students responded 200 in 10.4899 ms
+2026-03-04 19:31:55.623 +05:30 [INF] HTTP GET /api/teachers responded 200 in 10.9644 ms
+2026-03-04 19:31:55.623 +05:30 [INF] HTTP GET /api/fees responded 404 in 1.2542 ms
+2026-03-04 19:31:55.641 +05:30 [INF] HTTP GET /api/attendance responded 404 in 0.4298 ms
+2026-03-04 19:31:56.903 +05:30 [INF] HTTP GET /api/students responded 200 in 10.0776 ms
+2026-03-04 19:31:56.912 +05:30 [INF] HTTP GET /api/teachers responded 200 in 9.0548 ms
+2026-03-04 19:31:56.917 +05:30 [INF] HTTP GET /api/fees responded 404 in 0.3370 ms
+2026-03-04 19:31:56.935 +05:30 [INF] HTTP GET /api/attendance responded 404 in 0.4956 ms
+2026-03-04 19:35:41.826 +05:30 [INF] Starting School API
+2026-03-04 19:35:52.947 +05:30 [INF] HTTP POST /api/auth/login responded 200 in 380.8898 ms
+2026-03-04 19:35:53.195 +05:30 [INF] HTTP GET /api/fees responded 404 in 42.9513 ms
+2026-03-04 19:35:53.195 +05:30 [INF] HTTP GET /api/attendance responded 404 in 38.7850 ms
+2026-03-04 19:35:53.317 +05:30 [INF] HTTP GET /api/teachers responded 200 in 167.7061 ms
+2026-03-04 19:35:53.360 +05:30 [INF] HTTP GET /api/students responded 200 in 238.9306 ms
+2026-03-04 19:36:16.222 +05:30 [INF] HTTP GET /api/fees responded 404 in 1.4208 ms
+2026-03-04 19:36:16.229 +05:30 [INF] HTTP GET /api/attendance responded 404 in 0.8314 ms
+2026-03-04 19:36:16.239 +05:30 [INF] HTTP GET /api/students responded 200 in 31.2878 ms
+2026-03-04 19:36:16.239 +05:30 [INF] HTTP GET /api/teachers responded 200 in 25.4166 ms
+2026-03-04 19:36:17.090 +05:30 [INF] HTTP GET /api/students responded 200 in 13.3673 ms
+2026-03-04 19:36:17.090 +05:30 [INF] HTTP GET /api/fees responded 404 in 0.3209 ms
+2026-03-04 19:36:17.100 +05:30 [INF] HTTP GET /api/teachers responded 200 in 14.1292 ms
+2026-03-04 19:36:17.101 +05:30 [INF] HTTP GET /api/attendance responded 404 in 0.4036 ms
+2026-03-04 19:36:17.619 +05:30 [INF] HTTP GET /api/students responded 200 in 8.4709 ms
+2026-03-04 19:36:17.628 +05:30 [INF] HTTP GET /api/teachers responded 200 in 9.1776 ms
+2026-03-04 19:36:17.629 +05:30 [INF] HTTP GET /api/fees responded 404 in 0.8903 ms
+2026-03-04 19:36:17.643 +05:30 [INF] HTTP GET /api/attendance responded 404 in 0.3586 ms
+2026-03-04 19:36:18.002 +05:30 [INF] HTTP GET /api/students responded 200 in 7.5073 ms
+2026-03-04 19:36:18.009 +05:30 [INF] HTTP GET /api/teachers responded 200 in 7.6232 ms
+2026-03-04 19:36:18.010 +05:30 [INF] HTTP GET /api/fees responded 404 in 0.4289 ms
+2026-03-04 19:36:18.023 +05:30 [INF] HTTP GET /api/attendance responded 404 in 0.4572 ms
+2026-03-04 19:36:18.516 +05:30 [INF] HTTP GET /api/students responded 200 in 7.0115 ms
+2026-03-04 19:36:18.524 +05:30 [INF] HTTP GET /api/teachers responded 200 in 8.3847 ms
+2026-03-04 19:36:18.525 +05:30 [INF] HTTP GET /api/fees responded 404 in 0.3679 ms
+2026-03-04 19:36:18.535 +05:30 [INF] HTTP GET /api/attendance responded 404 in 0.3299 ms
+2026-03-04 19:40:12.692 +05:30 [INF] Starting School API
+2026-03-04 19:40:26.139 +05:30 [INF] HTTP POST /api/auth/login responded 200 in 378.4671 ms
+2026-03-04 19:40:26.380 +05:30 [INF] HTTP GET /api/attendance responded 404 in 38.4211 ms
+2026-03-04 19:40:26.380 +05:30 [INF] HTTP GET /api/fees responded 404 in 41.8981 ms
+2026-03-04 19:40:26.518 +05:30 [INF] HTTP GET /api/teachers responded 200 in 187.1908 ms
+2026-03-04 19:40:26.522 +05:30 [INF] HTTP GET /api/students responded 200 in 222.4523 ms
+2026-03-04 19:40:31.711 +05:30 [INF] HTTP GET /api/fees responded 404 in 0.3492 ms
+2026-03-04 19:40:31.719 +05:30 [INF] HTTP GET /api/teachers responded 200 in 14.9823 ms
+2026-03-04 19:40:31.711 +05:30 [INF] HTTP GET /api/students responded 200 in 14.9845 ms
+2026-03-04 19:40:31.725 +05:30 [INF] HTTP GET /api/attendance responded 404 in 0.4660 ms
+2026-03-04 19:40:33.708 +05:30 [INF] HTTP GET /api/students responded 200 in 12.6770 ms
+2026-03-04 19:40:34.963 +05:30 [INF] HTTP GET /api/students responded 200 in 8.5279 ms
+2026-03-04 19:40:34.976 +05:30 [INF] HTTP GET /api/teachers responded 200 in 13.4596 ms
+2026-03-04 19:40:34.976 +05:30 [INF] HTTP GET /api/fees responded 404 in 0.7221 ms
+2026-03-04 19:40:34.990 +05:30 [INF] HTTP GET /api/attendance responded 404 in 0.4612 ms
+2026-03-04 19:40:37.251 +05:30 [INF] HTTP GET /api/students responded 200 in 10.1426 ms
+2026-03-04 19:40:37.261 +05:30 [INF] HTTP GET /api/teachers responded 200 in 10.9893 ms
+2026-03-04 19:40:37.264 +05:30 [INF] HTTP GET /api/fees responded 404 in 0.3855 ms
+2026-03-04 19:40:37.284 +05:30 [INF] HTTP GET /api/attendance responded 404 in 0.4498 ms
+2026-03-04 19:42:08.293 +05:30 [INF] HTTP GET /api/students responded 200 in 20.5405 ms
+2026-03-04 19:42:14.026 +05:30 [INF] HTTP GET /api/students responded 200 in 8.1250 ms
+2026-03-04 19:42:14.050 +05:30 [INF] HTTP GET /api/teachers responded 200 in 13.0474 ms
+2026-03-04 19:42:14.052 +05:30 [INF] HTTP GET /api/fees responded 404 in 2.2573 ms
+2026-03-04 19:42:14.060 +05:30 [INF] HTTP GET /api/attendance responded 404 in 0.3446 ms

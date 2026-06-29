@@ -1,0 +1,117 @@
+﻿@page "/teachers/add"
+@using School.Application.DTOs.Teachers
+@using School.Web.Services
+@inject AuthService Auth
+@inject NavigationManager Nav
+@inject ToastService Toast
+
+<PageTitle>Add Teacher</PageTitle>
+
+<h3>Add Teacher</h3>
+
+@if (!Auth.IsLoggedIn)
+{
+    <p>Redirecting to login...</p>
+}
+else if (!Auth.IsAdmin)
+{
+    <div class="alert alert-warning">
+        You do not have permission to add teachers. Only <b>Admin</b> can access this page.
+    </div>
+
+    <button class="btn btn-secondary" @onclick="Cancel">Back</button>
+}
+else
+{
+    @if (!string.IsNullOrEmpty(_error))
+    {
+        <div class="alert alert-danger">@_error</div>
+    }
+
+    <div class="card p-4">
+
+        <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input class="form-control" @bind="_form.Name" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Subject</label>
+            <input class="form-control" @bind="_form.Subject" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Phone</label>
+            <input class="form-control" @bind="_form.Phone" />
+        </div>
+
+        <button class="btn btn-success me-2" @onclick="Save">Save</button>
+        <button class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+
+    </div>
+}
+
+@code {
+    private string? _error;
+    private TeacherCreateForm _form = new();
+
+    protected override void OnInitialized()
+    {
+        if (!Auth.IsLoggedIn)
+        {
+            Nav.NavigateTo("/login");
+            return;
+        }
+
+        if (!Auth.IsAdmin)
+        {
+            return;
+        }
+    }
+
+    private async Task Save()
+    {
+        if (!Auth.IsAdmin)
+        {
+            _error = "Access denied.";
+            return;
+        }
+
+        try
+        {
+            _error = null;
+
+            var req = new CreateTeacherRequest(
+                _form.Name,
+                _form.Subject,
+                _form.Phone
+            );
+
+            var client = Auth.GetAuthorizedClient();
+            var response = await client.PostAsJsonAsync("api/teachers", req);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _error = $"Save failed: {response.StatusCode}";
+                return;
+            }
+
+            Toast.ShowSuccess("Teacher added successfully.");
+            Nav.NavigateTo("/teachers");
+            
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+    }
+
+    private void Cancel() => Nav.NavigateTo("/teachers");
+
+    private class TeacherCreateForm
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Subject { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+    }
+}

@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Components.Routing
+@inject School.Web.Services.AuthService Auth
+
+<Router AppAssembly="typeof(Program).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="routeData" DefaultLayout="typeof(School.Web.Components.Layout.MainLayout)" />
+    </Found>
+    <NotFound>
+        <LayoutView Layout="typeof(School.Web.Components.Layout.MainLayout)">
+            <p>Sorry, page not found.</p>
+        </LayoutView>
+    </NotFound>
+</Router>
+
+@code {
+    private bool _initDone;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender || _initDone) return;
+        _initDone = true;
+
+        await Auth.InitializeAsync();
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,116 @@
+﻿@page "/fees/student/{StudentId:guid}/payments"
+@using System.Text.Json
+@inject School.Web.Services.AuthService Auth
+@inject NavigationManager Nav
+
+<PageTitle>Student Payments</PageTitle>
+
+<h3>Student Payments</h3>
+
+@if (_loading)
+{
+    <p>Loading...</p>
+}
+else if (!string.IsNullOrWhiteSpace(_error))
+{
+    <div class="alert alert-danger">@_error</div>
+}
+else
+{
+    <div class="mb-3 d-flex gap-2">
+        <button class="btn btn-outline-secondary" @onclick="Back">Back</button>
+        <button class="btn btn-success" @onclick="GoPay">Pay Fee</button>
+    </div>
+
+    @if (_rows.Count == 0)
+    {
+        <p>No payments found.</p>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in _rows)
+                {
+                    <tr>
+                        <td>@GetText(r, "date", "Date", "paidOn", "PaidOn", "paymentDate", "PaymentDate")</td>
+                        <td>@GetText(r, "amount", "Amount", "paidAmount", "PaidAmount")</td>
+                        <td>@GetText(r, "remarks", "Remarks", "note", "Note")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+
+@code {
+    [Parameter] public Guid StudentId { get; set; }
+
+    private bool _loading = true;
+    private string? _error;
+    private List<JsonElement> _rows = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        if (!Auth.IsLoggedIn)
+        {
+            Nav.NavigateTo("/login");
+            return;
+        }
+
+        await LoadAsync();
+        StateHasChanged();
+    }
+
+    private async Task LoadAsync()
+    {
+        try
+        {
+            var client = Auth.GetAuthorizedClient();
+            var res = await client.GetAsync($"api/fees/student/{StudentId}");
+
+            if (!res.IsSuccessStatusCode)
+            {
+                _error = $"Load failed: {res.StatusCode}";
+                return;
+            }
+
+            var json = await res.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(json);
+
+            _rows = doc.RootElement.ValueKind == JsonValueKind.Array
+                ? doc.RootElement.EnumerateArray().Select(e => e.Clone()).ToList()
+                : new List<JsonElement>();
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private void Back() => Nav.NavigateTo("/fees");
+    private void GoPay() => Nav.NavigateTo($"/fees/pay/{StudentId}");
+
+    private static string GetText(JsonElement obj, params string[] keys)
+    {
+        foreach (var k in keys)
+        {
+            if (obj.ValueKind == JsonValueKind.Object && obj.TryGetProperty(k, out var p))
+                return p.ToString();
+        }
+        return "";
+    }
+}

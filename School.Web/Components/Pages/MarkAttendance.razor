@@ -1,0 +1,253 @@
+﻿@page "/attendance/mark"
+@using School.Application.DTOs.Students
+@using System.Text.Json
+@using School.Web.Services
+@inject School.Web.Services.AuthService Auth
+@inject NavigationManager Nav
+@inject ToastService Toast
+
+<PageTitle>Mark Attendance</PageTitle>
+
+<h3>Mark Attendance</h3>
+
+@if (!Auth.IsLoggedIn)
+{
+    <p>Redirecting to login...</p>
+}
+else if (!Auth.IsAdmin)
+{
+    <div class="alert alert-warning">
+        You do not have permission to mark attendance. Only <b>Admin</b> can access this page.
+    </div>
+
+    <div class="mt-2">
+        <button class="btn btn-secondary" @onclick="Back">Back</button>
+        <button class="btn btn-outline-primary ms-2" @onclick="GoClassView">Class View</button>
+    </div>
+}
+else if (_loadingStudents)
+{
+    <p>Loading students...</p>
+}
+else if (!string.IsNullOrWhiteSpace(_error))
+{
+    <div class="alert alert-danger">@_error</div>
+}
+else
+{
+    <div class="card p-3 mb-3">
+        <div class="row g-3">
+            <div class="col-12 col-md-4">
+                <label class="form-label">Class</label>
+                <input class="form-control" placeholder="Example: 10A"
+                       @bind="_className" @bind:event="oninput" />
+            </div>
+
+            <div class="col-12 col-md-4">
+                <label class="form-label">Date</label>
+                <input type="date" class="form-control" @bind="_date" />
+            </div>
+
+            <div class="col-12 col-md-4 d-flex align-items-end gap-2">
+                <button class="btn btn-outline-secondary" @onclick="LoadClassAttendance">Load</button>
+                <button class="btn btn-outline-primary" @onclick="GoClassView">Class View</button>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(_info))
+        {
+            <div class="text-muted small mt-2">@_info</div>
+        }
+    </div>
+
+    @if (_filteredStudents.Count == 0)
+    {
+        <p>No students found for class <b>@_className</b>.</p>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Class</th>
+                    <th style="width:260px;">Mark</th>
+                    <th style="width:140px;">History</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var s in _filteredStudents)
+                {
+                    <tr>
+                        <td>@s.Name</td>
+                        <td>@s.Class</td>
+                        <td>
+                            <button class="btn btn-sm btn-success me-2" @onclick="() => Mark(s.Id, true)">Present</button>
+                            <button class="btn btn-sm btn-danger" @onclick="() => Mark(s.Id, false)">Absent</button>
+
+                            @if (_marked.TryGetValue(s.Id, out var status))
+                            {
+                                <span class="ms-2 badge @(status ? "bg-success" : "bg-danger")">
+                                    @(status ? "Marked Present" : "Marked Absent")
+                                </span>
+                            }
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-secondary" @onclick="() => GoStudentHistory(s.Id)">
+                                View
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+
+@code {
+    private string? _error;
+    private string? _info;
+
+    private bool _loadingStudents = true;
+
+    private List<StudentResponse> _students = new();
+    private List<StudentResponse> _filteredStudents = new();
+
+    private string _className = "10A";
+    private DateTime _date = DateTime.Today;
+
+    private readonly Dictionary<Guid, bool> _marked = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        if (!Auth.IsLoggedIn)
+        {
+            Nav.NavigateTo("/login");
+            return;
+        }
+
+        if (!Auth.IsAdmin)
+        {
+            StateHasChanged();
+            return;
+        }
+
+        await LoadStudentsAsync();
+        ApplyClassFilter();
+        StateHasChanged();
+    }
+
+    private async Task LoadStudentsAsync()
+    {
+        try
+        {
+            _loadingStudents = true;
+            _error = null;
+
+            var client = Auth.GetAuthorizedClient();
+            var list = await client.GetFromJsonAsync<List<StudentResponse>>("api/students");
+
+            _students = list ?? new List<StudentResponse>();
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+            Toast.ShowError("Failed to load students.");
+        }
+        finally
+        {
+            _loadingStudents = false;
+        }
+    }
+
+    private void ApplyClassFilter()
+    {
+        _filteredStudents = string.IsNullOrWhiteSpace(_className)
+            ? new List<StudentResponse>()
+            : _students.Where(s => string.Equals(s.Class, _className, StringComparison.OrdinalIgnoreCase)).ToList();
+    }
+
+    private async Task LoadClassAttendance()
+    {
+        _info = null;
+        ApplyClassFilter();
+
+        try
+        {
+            var client = Auth.GetAuthorizedClient();
+            var dateStr = _date.ToString("yyyy-MM-dd");
+
+            var res = await client.GetAsync($"api/attendance/class/{_className}/date/{dateStr}");
+
+            if (!res.IsSuccessStatusCode)
+            {
+                _info = $"No class attendance found for {_className} on {dateStr}.";
+                Toast.ShowWarning("No class attendance found.");
+                return;
+            }
+
+            _info = $"Loaded attendance view for {_className} on {dateStr}.";
+            Toast.ShowInfo("Attendance view loaded.");
+        }
+        catch
+        {
+            _info = $"Class attendance view not available for {_className} on {_date:yyyy-MM-dd}.";
+            Toast.ShowWarning("Class attendance view not available.");
+        }
+    }
+
+    private async Task Mark(Guid studentId, bool present)
+    {
+        if (!Auth.IsAdmin)
+        {
+            _error = "Only Admin can mark attendance.";
+            Toast.ShowWarning("Access denied.");
+            return;
+        }
+
+        try
+        {
+            _error = null;
+
+            var client = Auth.GetAuthorizedClient();
+
+            var payload = new
+            {
+                StudentId = studentId,
+                Date = _date,
+                Status = present ? "Present" : "Absent"
+            };
+
+            var res = await client.PostAsJsonAsync("api/attendance/mark", payload);
+
+            if (!res.IsSuccessStatusCode)
+            {
+                var body = await res.Content.ReadAsStringAsync();
+                _error = $"Mark failed: {res.StatusCode}. {body}";
+                Toast.ShowError("Failed to mark attendance.");
+                return;
+            }
+
+            _marked[studentId] = present;
+            Toast.ShowSuccess(present ? "Marked Present." : "Marked Absent.");
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+            Toast.ShowError("Something went wrong while marking attendance.");
+        }
+    }
+
+    private void GoStudentHistory(Guid studentId)
+        => Nav.NavigateTo($"/attendance/student/{studentId}");
+
+    private void GoClassView()
+    {
+        var dateStr = _date.ToString("yyyy-MM-dd");
+        Nav.NavigateTo($"/attendance/class/{_className}/date/{dateStr}");
+    }
+
+    private void Back() => Nav.NavigateTo("/dashboard");
+}

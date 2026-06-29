@@ -1,0 +1,258 @@
+﻿@page "/dashboard"
+@using System.Text.Json
+@inject School.Web.Services.AuthService Auth
+@inject NavigationManager Nav
+
+<PageTitle>Dashboard</PageTitle>
+
+@if (!Auth.IsLoggedIn)
+{
+    <p>Redirecting to login...</p>
+}
+else if (_loading)
+{
+    <p>Loading dashboard...</p>
+}
+else if (!string.IsNullOrWhiteSpace(_error))
+{
+    <div class="alert alert-danger">@_error</div>
+}
+else
+{
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+        <div>
+            <h3 class="mb-1">Dashboard</h3>
+            <div class="text-muted">Quick overview of your school system</div>
+        </div>
+
+        <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-success">
+                @(string.IsNullOrWhiteSpace(Auth.Username) ? "Logged in" : Auth.Username)
+                @(string.IsNullOrWhiteSpace(Auth.Role) ? "" : $"({Auth.Role})")
+            </span>
+
+            <button class="btn btn-outline-secondary" @onclick="Refresh">
+                Refresh
+            </button>
+
+            <button class="btn btn-danger" @onclick="Logout">
+                Logout
+            </button>
+        </div>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 mb-4">
+        <button class="btn btn-outline-primary" @onclick="GoStudents">Students</button>
+        <button class="btn btn-outline-primary" @onclick="GoTeachers">Teachers</button>
+        <button class="btn btn-outline-primary" @onclick="GoFees">Fees</button>
+        <button class="btn btn-outline-primary" @onclick="GoAttendance">Attendance</button>
+        <button class="btn btn-outline-primary" @onclick="GoReports">Reports</button>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="card p-3">
+                <div class="fw-bold">Total Students</div>
+                <div class="display-6">@_studentsCount</div>
+                <div class="text-muted small">From GET /api/students</div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="card p-3">
+                <div class="fw-bold">Total Teachers</div>
+                <div class="display-6">@_teachersCount</div>
+                <div class="text-muted small">From GET /api/teachers</div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="card p-3">
+                <div class="fw-bold">Fee Payments</div>
+                <div class="display-6">@_feesCount</div>
+                <div class="text-muted small">From GET /api/fees</div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="card p-3">
+                <div class="fw-bold">Attendance Records</div>
+                <div class="display-6">@_attendanceCount</div>
+                <div class="text-muted small">From GET /api/attendance</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3 text-muted small">
+        Last refreshed: <span class="fw-semibold">@_lastRefreshed</span>
+    </div>
+
+    @if (_warnings.Count > 0)
+    {
+        <div class="alert alert-warning mt-3">
+            <div class="fw-bold">Warnings</div>
+            <ul class="mb-0">
+                @foreach (var w in _warnings)
+                {
+                    <li>@w</li>
+                }
+            </ul>
+        </div>
+    }
+}
+
+@code {
+    private bool _loading = true;
+    private string? _error;
+    private readonly List<string> _warnings = new();
+
+    private string _studentsCount = "-";
+    private string _teachersCount = "-";
+    private string _feesCount = "-";
+    private string _attendanceCount = "-";
+    private string _lastRefreshed = "-";
+
+    private void GoStudents() => Nav.NavigateTo("/students");
+    private void GoTeachers() => Nav.NavigateTo("/teachers");
+    private void GoFees() => Nav.NavigateTo("/fees");
+    private void GoAttendance() => Nav.NavigateTo("/attendance/mark");
+    private void GoReports() => Nav.NavigateTo("/reports");
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        if (!Auth.IsLoggedIn)
+        {
+            Nav.NavigateTo("/login");
+            return;
+        }
+
+        await LoadAsync();
+        StateHasChanged();
+    }
+
+    private async Task Refresh()
+    {
+        await LoadAsync();
+    }
+
+    private async Task Logout()
+    {
+        await Auth.LogoutAsync();
+        Nav.NavigateTo("/login");
+    }
+
+    private async Task LoadAsync()
+    {
+        _loading = true;
+        _error = null;
+        _warnings.Clear();
+
+        try
+        {
+            var client = Auth.GetAuthorizedClient();
+
+            var studentsTask = GetCountAnyAsync(client, "Students", new[]
+            {
+                "api/students"
+            });
+
+            var teachersTask = GetCountAnyAsync(client, "Teachers", new[]
+            {
+                "api/teachers"
+            });
+
+            var feesTask = GetCountAnyAsync(client, "Fees", new[]
+            {
+                "api/fees",
+                "api/feepayments",
+                "api/feePayments",
+                "api/feepayment",
+                "api/fee-payment",
+                "api/fee-payments"
+            });
+
+            var attendanceTask = GetCountAnyAsync(client, "Attendance", new[]
+            {
+                "api/attendance",
+                "api/attendances",
+                "api/attendanceRecords",
+                "api/attendance-records",
+                "api/attendance/records"
+            });
+
+            await Task.WhenAll(studentsTask, teachersTask, feesTask, attendanceTask);
+
+            _studentsCount = studentsTask.Result;
+            _teachersCount = teachersTask.Result;
+            _feesCount = feesTask.Result;
+            _attendanceCount = attendanceTask.Result;
+
+            _lastRefreshed = DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss");
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _loading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task<string> GetCountAnyAsync(HttpClient client, string label, string[] urls)
+    {
+        foreach (var url in urls)
+        {
+            var count = await GetCountAsync(client, url, label);
+
+            if (count != "N/A")
+                return count;
+        }
+
+        _warnings.Add($"{label}: No working endpoint found. Tried: {string.Join(", ", urls)}");
+        return "N/A";
+    }
+
+    private async Task<string> GetCountAsync(HttpClient client, string url, string label)
+    {
+        try
+        {
+            var res = await client.GetAsync(url);
+
+            if (!res.IsSuccessStatusCode)
+            {
+                _warnings.Add($"{label}: {url} returned {res.StatusCode}");
+                return "N/A";
+            }
+
+            var json = await res.Content.ReadAsStringAsync();
+            if (string.IsNullOrWhiteSpace(json))
+                return "0";
+
+            using var doc = JsonDocument.Parse(json);
+
+            if (doc.RootElement.ValueKind == JsonValueKind.Array)
+                return doc.RootElement.GetArrayLength().ToString();
+
+            if (doc.RootElement.ValueKind == JsonValueKind.Object)
+            {
+                if (doc.RootElement.TryGetProperty("count", out var countProp) && countProp.ValueKind == JsonValueKind.Number)
+                    return countProp.GetInt32().ToString();
+
+                _warnings.Add($"{label}: {url} did not return a list (array).");
+                return "N/A";
+            }
+
+            _warnings.Add($"{label}: {url} returned unexpected JSON.");
+            return "N/A";
+        }
+        catch (Exception ex)
+        {
+            _warnings.Add($"{label}: {ex.Message}");
+            return "N/A";
+        }
+    }
+}

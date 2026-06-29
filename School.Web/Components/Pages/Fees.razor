@@ -1,0 +1,196 @@
+﻿@page "/fees"
+@using System.Text.Json
+@inject School.Web.Services.AuthService Auth
+@inject NavigationManager Nav
+
+<PageTitle>Fees</PageTitle>
+
+<h3>Fees - Dues</h3>
+
+@if (!Auth.IsLoggedIn)
+{
+    <p>Redirecting to login...</p>
+}
+else if (_loading)
+{
+    <p>Loading dues...</p>
+}
+else if (!string.IsNullOrWhiteSpace(_error))
+{
+    <div class="alert alert-danger">@_error</div>
+}
+else
+{
+    <div class="d-flex flex-wrap gap-2 mb-3">
+        @if (Auth.IsAdmin)
+        {
+            <button class="btn btn-primary" @onclick="GoPay">Pay Fee</button>
+        }
+        <button class="btn btn-outline-secondary" @onclick="LoadDuesAsync">Refresh</button>
+    </div>
+
+    @if (_dues.Count == 0)
+    {
+        <p>No dues found.</p>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Class</th>
+                    <th>Total Fee</th>
+                    <th>Paid</th>
+                    <th>Due</th>
+                    <th style="width:220px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in _dues)
+                {
+                    var studentId = GetGuid(row, "studentId", "StudentId", "id", "Id");
+
+                    <tr>
+                        <td>@GetText(row, "name", "Name", "studentName", "StudentName")</td>
+                        <td>@GetText(row, "class", "Class", "className", "ClassName")</td>
+                        <td>@GetNumber(row, "totalFee", "TotalFee")</td>
+                        <td>@GetNumber(row, "paid", "Paid", "paidAmount", "PaidAmount")</td>
+                        <td>@GetNumber(row, "due", "Due", "dueAmount", "DueAmount")</td>
+                        <td>
+                            @if (studentId != Guid.Empty)
+                            {
+                                <button class="btn btn-sm btn-outline-primary me-2" @onclick="() => GoPayments(studentId)">History</button>
+                                <button class="btn btn-sm btn-outline-secondary me-2" @onclick="() => GoSummary(studentId)">Summary</button>
+
+                                @if (Auth.IsAdmin)
+                                {
+                                    <button class="btn btn-sm btn-success" @onclick="() => GoPayFor(studentId)">Pay</button>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted small">No StudentId</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+
+@code {
+    private bool _loading = true;
+    private string? _error;
+    private List<JsonElement> _dues = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        if (!Auth.IsLoggedIn)
+        {
+            Nav.NavigateTo("/login");
+            return;
+        }
+
+        await LoadDuesAsync();
+        StateHasChanged();
+    }
+
+    private void GoPay()
+    {
+        if (!Auth.IsAdmin)
+        {
+            _error = "Access denied.";
+            return;
+        }
+
+        Nav.NavigateTo("/fees/pay");
+    }
+
+    private void GoPayFor(Guid studentId)
+    {
+        if (!Auth.IsAdmin)
+        {
+            _error = "Access denied.";
+            return;
+        }
+
+        Nav.NavigateTo($"/fees/pay/{studentId}");
+    }
+
+    private void GoPayments(Guid studentId) => Nav.NavigateTo($"/fees/student/{studentId}/payments");
+    private void GoSummary(Guid studentId) => Nav.NavigateTo($"/fees/student/{studentId}/summary");
+
+    private async Task LoadDuesAsync()
+    {
+        try
+        {
+            _loading = true;
+            _error = null;
+
+            var client = Auth.GetAuthorizedClient();
+            var res = await client.GetAsync("api/fees/dues");
+
+            if (!res.IsSuccessStatusCode)
+            {
+                _error = $"Load failed: {res.StatusCode}";
+                return;
+            }
+
+            var json = await res.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(json);
+
+            _dues = doc.RootElement.ValueKind == JsonValueKind.Array
+                    ? doc.RootElement.EnumerateArray().Select(e => e.Clone()).ToList()
+                    : new List<JsonElement>();
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private static string GetText(JsonElement obj, params string[] keys)
+    {
+        foreach (var k in keys)
+        {
+            if (obj.ValueKind == JsonValueKind.Object && obj.TryGetProperty(k, out var p))
+            {
+                if (p.ValueKind == JsonValueKind.String) return p.GetString() ?? "";
+                return p.ToString();
+            }
+        }
+        return "";
+    }
+
+    private static string GetNumber(JsonElement obj, params string[] keys)
+    {
+        foreach (var k in keys)
+        {
+            if (obj.ValueKind == JsonValueKind.Object && obj.TryGetProperty(k, out var p))
+                return p.ToString();
+        }
+        return "0";
+    }
+
+    private static Guid GetGuid(JsonElement obj, params string[] keys)
+    {
+        foreach (var k in keys)
+        {
+            if (obj.ValueKind == JsonValueKind.Object && obj.TryGetProperty(k, out var p))
+            {
+                if (p.ValueKind == JsonValueKind.String && Guid.TryParse(p.GetString(), out var g)) return g;
+                if (p.ValueKind == JsonValueKind.Object) continue;
+                if (Guid.TryParse(p.ToString(), out var g2)) return g2;
+            }
+        }
+        return Guid.Empty;
+    }
+}

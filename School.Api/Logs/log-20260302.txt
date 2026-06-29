@@ -1,0 +1,11 @@
+2026-03-02 18:17:29.435 +05:30 [INF] Starting School API
+2026-03-02 18:17:44.399 +05:30 [INF] HTTP POST /api/Auth/login responded 200 in 343.9250 ms
+2026-03-02 18:18:11.790 +05:30 [INF] HTTP POST /api/Attendance/mark responded 404 in 174.5279 ms
+2026-03-02 18:18:30.501 +05:30 [INF] HTTP GET /api/Students responded 200 in 48.7659 ms
+2026-03-02 18:19:28.133 +05:30 [INF] HTTP GET /api/Attendance/student/77164845-9504-4d4d-adc6-823c48db76f4 responded 200 in 63.5661 ms
+2026-03-02 18:20:27.059 +05:30 [INF] HTTP GET /api/Attendance/class/string/date/02-03-2026 responded 200 in 25.9617 ms
+2026-03-02 19:17:09.138 +05:30 [INF] Starting School API
+2026-03-02 19:24:53.363 +05:30 [INF] Starting School API
+2026-03-02 19:30:36.724 +05:30 [INF] Starting School API
+2026-03-02 19:31:59.210 +05:30 [INF] Starting School API
+2026-03-02 19:34:05.676 +05:30 [INF] Starting School API

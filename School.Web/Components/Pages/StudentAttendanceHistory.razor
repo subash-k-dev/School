@@ -1,0 +1,123 @@
+﻿@page "/attendance/student/{StudentId:guid}"
+@using System.Text.Json
+@inject School.Web.Services.AuthService Auth
+@inject NavigationManager Nav
+
+<PageTitle>Student Attendance History</PageTitle>
+
+<h3>Student Attendance History</h3>
+
+@if (!Auth.IsLoggedIn)
+{
+    <p>Redirecting to login...</p>
+}
+else if (_loading)
+{
+    <p>Loading...</p>
+}
+else if (!string.IsNullOrWhiteSpace(_error))
+{
+    <div class="alert alert-danger">@_error</div>
+}
+else
+{
+    <div class="card p-3 mb-3">
+        <div><span class="fw-bold">Student Id:</span> @StudentId</div>
+    </div>
+
+    @if (_rows.Count == 0)
+    {
+        <p>No attendance history found.</p>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Marked By</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in _rows)
+                {
+                    <tr>
+                        <td>@GetText(r, "date", "Date")</td>
+                        <td>@GetText(r, "status", "Status")</td>
+                        <td>@GetText(r, "markedBy", "MarkedBy")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <button class="btn btn-secondary" @onclick="Back">Back</button>
+}
+
+@code {
+    [Parameter] public Guid StudentId { get; set; }
+
+    private bool _loading = true;
+    private string? _error;
+    private List<JsonElement> _rows = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        if (!Auth.IsLoggedIn)
+        {
+            Nav.NavigateTo("/login");
+            return;
+        }
+
+        await LoadAsync();
+        StateHasChanged();
+    }
+
+    private async Task LoadAsync()
+    {
+        try
+        {
+            _loading = true;
+            _error = null;
+
+            var client = Auth.GetAuthorizedClient();
+            var res = await client.GetAsync($"api/attendance/student/{StudentId}");
+
+            if (!res.IsSuccessStatusCode)
+            {
+                _error = $"Load failed: {res.StatusCode}";
+                return;
+            }
+
+            var json = await res.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(json);
+
+            _rows = doc.RootElement.ValueKind == JsonValueKind.Array
+                ? doc.RootElement.EnumerateArray().Select(e => e.Clone()).ToList()
+                : new List<JsonElement>();
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private void Back() => Nav.NavigateTo("/attendance/mark");
+
+    private static string GetText(JsonElement obj, params string[] keys)
+    {
+        foreach (var k in keys)
+        {
+            if (obj.ValueKind == JsonValueKind.Object && obj.TryGetProperty(k, out var p))
+                return p.ToString();
+        }
+        return "";
+    }
+}

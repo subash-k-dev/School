@@ -1,0 +1,105 @@
+﻿@page "/fees/student/{StudentId:guid}/summary"
+@using System.Text.Json
+@inject School.Web.Services.AuthService Auth
+@inject NavigationManager Nav
+
+<PageTitle>Fee Summary</PageTitle>
+
+<h3>Fee Summary</h3>
+
+@if (_loading)
+{
+    <p>Loading...</p>
+}
+else if (!string.IsNullOrWhiteSpace(_error))
+{
+    <div class="alert alert-danger">@_error</div>
+}
+else
+{
+    <div class="mb-3 d-flex gap-2">
+        <button class="btn btn-outline-secondary" @onclick="Back">Back</button>
+        <button class="btn btn-outline-primary" @onclick="GoPayments">View Payments</button>
+        <button class="btn btn-success" @onclick="GoPay">Pay Fee</button>
+    </div>
+
+    <div class="card p-4">
+        <div><span class="fw-bold">Student:</span> @_studentName</div>
+        <div><span class="fw-bold">Total Fee:</span> @_totalFee</div>
+        <div><span class="fw-bold">Paid:</span> @_paid</div>
+        <div><span class="fw-bold">Due:</span> @_due</div>
+    </div>
+}
+
+@code {
+    [Parameter] public Guid StudentId { get; set; }
+
+    private bool _loading = true;
+    private string? _error;
+
+    private string _studentName = "";
+    private string _totalFee = "0";
+    private string _paid = "0";
+    private string _due = "0";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        if (!Auth.IsLoggedIn)
+        {
+            Nav.NavigateTo("/login");
+            return;
+        }
+
+        await LoadAsync();
+        StateHasChanged();
+    }
+
+    private async Task LoadAsync()
+    {
+        try
+        {
+            var client = Auth.GetAuthorizedClient();
+            var res = await client.GetAsync($"api/fees/student/{StudentId}/summary");
+
+            if (!res.IsSuccessStatusCode)
+            {
+                _error = $"Load failed: {res.StatusCode}";
+                return;
+            }
+
+            var json = await res.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(json);
+
+            var root = doc.RootElement;
+
+            _studentName = GetText(root, "name", "Name", "studentName", "StudentName");
+            _totalFee = GetText(root, "totalFee", "TotalFee");
+            _paid = GetText(root, "paid", "Paid", "paidAmount", "PaidAmount");
+            _due = GetText(root, "due", "Due", "dueAmount", "DueAmount");
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private void Back() => Nav.NavigateTo("/fees");
+    private void GoPayments() => Nav.NavigateTo($"/fees/student/{StudentId}/payments");
+    private void GoPay() => Nav.NavigateTo($"/fees/pay/{StudentId}");
+
+    private static string GetText(JsonElement obj, params string[] keys)
+    {
+        foreach (var k in keys)
+        {
+            if (obj.ValueKind == JsonValueKind.Object && obj.TryGetProperty(k, out var p))
+                return p.ToString();
+        }
+        return "";
+    }
+}
